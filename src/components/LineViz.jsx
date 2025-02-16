@@ -32,9 +32,10 @@ const LineViz = () => {
   }), [currentParam, params, W, H]);
 
   const updateParams = useCallback((clientX, clientY) => {
-    const rect = dragRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    const parameterSpace = document.getElementById('parameter-space');
+    if (!parameterSpace) return;
     
+    const rect = parameterSpace.getBoundingClientRect();
     const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     const y = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
     

@@ -7,6 +7,7 @@ const ParameterSpace = ({ params, onMouseDown, paramSpace }) => {
       <h2 className="text-base sm:text-lg font-medium mb-2 sm:mb-4 dark:text-white">Parameter Space</h2>
       <div className="aspect-square">
         <div 
+          id="parameter-space"
           className="relative w-full h-full border border-gray-300 dark:border-gray-600 cursor-crosshair bg-white dark:bg-gray-800 rounded-lg"
           onMouseDown={onMouseDown}
         >
