@@ -1,6 +1,6 @@
 # <div align="center">Interactive Line Parametrisation</div>
 
-This interactive visualization demonstrates different ways to parametrize lines in 2D space.
+This [interactive visualization](https://kevinconka.github.io/line-parametrization/) demonstrates different ways to parametrize lines in 2D space.
 
 > [!NOTE]
 > Most of the code is product of a conversation with [Claude](https://claude.ai).
