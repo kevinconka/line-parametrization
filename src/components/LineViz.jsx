@@ -42,23 +42,46 @@ const LineViz = () => {
     setParams({ x, y });
   }, []);
 
-  const handleMouseDown = useCallback((e) => {
+  const handleStart = useCallback((e) => {
     e.preventDefault();
-    updateParams(e.clientX, e.clientY);
     
-    const handleMouseMove = (e) => {
-      e.preventDefault();
-      updateParams(e.clientX, e.clientY);
-    };
-
-    const handleMouseUp = () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    // Handle both mouse and touch events
+    const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+    
+    updateParams(clientX, clientY);
   }, [updateParams]);
+
+  const handleMove = useCallback((e) => {
+    e.preventDefault();
+    
+    // Handle both mouse and touch events
+    const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+    
+    updateParams(clientX, clientY);
+  }, [updateParams]);
+
+  const handleEnd = useCallback(() => {
+    window.removeEventListener('mousemove', handleMove);
+    window.removeEventListener('mouseup', handleEnd);
+    window.removeEventListener('touchmove', handleMove);
+    window.removeEventListener('touchend', handleEnd);
+  }, [handleMove]);
+
+  const handleMouseDown = useCallback((e) => {
+    handleStart(e);
+    
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleEnd);
+  }, [handleStart, handleMove, handleEnd]);
+
+  const handleTouchStart = useCallback((e) => {
+    handleStart(e);
+    
+    window.addEventListener('touchmove', handleMove, { passive: false });
+    window.addEventListener('touchend', handleEnd);
+  }, [handleStart, handleMove, handleEnd]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -93,7 +116,7 @@ const LineViz = () => {
             <ParameterSpace 
               params={params}
               onMouseDown={handleMouseDown}
-              paramSpace={currentParam.paramSpace}
+              onTouchStart={handleTouchStart}
             />
           </div>
 
