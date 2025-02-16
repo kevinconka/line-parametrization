@@ -14,11 +14,10 @@ export const parametrizations = {
         "x' = x - W/2",
         "y' = y - H/2",
         "ρ = x'·cos(θ) + y'·sin(θ)",
-        "for any point (x,y) on the line"
+        "ρ_max = sqrt((W/2)^2 + (H/2)^2)"
       ],
       notes: [
-        "The origin is placed at the image center (W/2, H/2)",
-        "ρ_max is the maximum possible distance from center to any line in the image"
+        "The parameter space is normalized to [0,1] for both θ and ρ",
       ]
     },
     paramSpace: {
@@ -29,7 +28,7 @@ export const parametrizations = {
     },
     getEndpoints: (params, width, height) => {
       const maxRho = getMaxRho(width, height);
-      const theta = params.x * Math.PI;
+      const thetaRad = params.x * Math.PI;
       const rho = (params.y * 2 - 1) * maxRho;
       
       const pts = [];
@@ -38,19 +37,19 @@ export const parametrizations = {
       const top = -height/2;
       const bottom = height/2;
       
-      if (Math.abs(Math.sin(theta)) > 1e-6) {
-        const yLeft = (rho - left * Math.cos(theta)) / Math.sin(theta);
+      if (Math.abs(Math.sin(thetaRad)) > 1e-6) {
+        const yLeft = (rho - left * Math.cos(thetaRad)) / Math.sin(thetaRad);
         if (top <= yLeft && yLeft <= bottom) pts.push([left, yLeft]);
         
-        const yRight = (rho - right * Math.cos(theta)) / Math.sin(theta);
+        const yRight = (rho - right * Math.cos(thetaRad)) / Math.sin(thetaRad);
         if (top <= yRight && yRight <= bottom) pts.push([right, yRight]);
       }
       
-      if (Math.abs(Math.cos(theta)) > 1e-6) {
-        const xTop = (rho - top * Math.sin(theta)) / Math.cos(theta);
+      if (Math.abs(Math.cos(thetaRad)) > 1e-6) {
+        const xTop = (rho - top * Math.sin(thetaRad)) / Math.cos(thetaRad);
         if (left <= xTop && xTop <= right) pts.push([xTop, top]);
         
-        const xBottom = (rho - bottom * Math.sin(theta)) / Math.cos(theta);
+        const xBottom = (rho - bottom * Math.sin(thetaRad)) / Math.cos(thetaRad);
         if (left <= xBottom && xBottom <= right) pts.push([xBottom, bottom]);
       }
       
@@ -71,10 +70,10 @@ export const parametrizations = {
     },
     getParamValues: (params, width, height) => {
       const maxRho = getMaxRho(width, height);
-      const theta = params.x * Math.PI;
+      const thetaDeg = params.x * 180;
       const rho = (params.y * 2 - 1) * maxRho;
       return {
-        param1: { label: "θ", value: `${theta.toFixed(2)} rad` },
+        param1: { label: "θ", value: `${thetaDeg.toFixed(2)}°` },
         param2: { label: "ρ", value: `${rho.toFixed(2)} px` }
       };
     },
@@ -93,13 +92,19 @@ export const parametrizations = {
     description: {
       overview: "The midpoint-theta parametrization represents lines by their intersection point with the vertical midline and their angle from vertical.",
       parameters: [
-        "midpoint: relative vertical position where line crosses x = 0.5 (range: 0.15 to 0.85)",
-        "θ: angle from vertical direction (range: -π/2 to π/2)"
+        "midpoint: relative vertical position where line crosses x = 0.5",
+        "θ: angle from vertical direction (range: -180° to 180°)"
       ],
       equations: [
-        "y = mx + b",
+        "θ = (x - 0.5)·π",
         "m = tan(θ)",
-        "b = midpoint - m·0.5"
+        "midpoint = y_min + y·(y_max - y_min)",
+        "b = midpoint - m·0.5",
+        "y = mx + b"
+      ],
+      notes: [
+        "The parameter space is normalized to [0,1] for both midpoint and θ",
+        "y_min = 0.15, y_max = 0.85 to keep lines visible in the image"
       ]
     },
     paramSpace: {
@@ -111,7 +116,7 @@ export const parametrizations = {
     getEndpoints: (params, width, height) => {
       const yRange = [0.15, 0.85];
       const normalizedMidpoint = (params.y - yRange[0]) / (yRange[1] - yRange[0]);
-      const thetaRad = params.x;
+      const thetaRad = (params.x - 0.5) * Math.PI;
       
       const m = Math.tan(thetaRad);
       const b = normalizedMidpoint - m * 0.5;
@@ -137,11 +142,11 @@ export const parametrizations = {
     },
     getParamValues: (params, width, height) => {
       const yRange = [0.15, 0.85];
-      const theta = params.x;
+      const thetaDeg = (params.x - 0.5) * 180;
       const midpoint = yRange[0] + params.y * (yRange[1] - yRange[0]);
       const midpointPixel = midpoint * height;
       return {
-        param1: { label: "θ", value: `${theta.toFixed(2)} rad` },
+        param1: { label: "θ", value: `${thetaDeg.toFixed(1)}°` },
         param2: { label: "midpoint", value: midpointPixel.toFixed(2) }
       };
     },
