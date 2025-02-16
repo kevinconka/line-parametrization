@@ -64,13 +64,13 @@ const LineViz = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Top Navigation Bar */}
       <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 z-10">
-        <div className="px-2 sm:px-4 h-14 flex items-center justify-between max-w-screen-2xl mx-auto">
-          <h1 className="text-lg sm:text-xl font-semibold dark:text-white truncate">
-            Line Parametrization Visualization
+        <div className="px-3 min-h-[3.5rem] flex items-center justify-between max-w-screen-2xl mx-auto">
+          <h1 className="text-base sm:text-lg font-semibold dark:text-white">
+            Line Parametrization
           </h1>
-          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+          <div className="flex items-center gap-2">
             <Select value={paramType} onValueChange={setParamType}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[120px] sm:w-[180px] h-9">
                 <SelectValue placeholder="Select parametrization" />
               </SelectTrigger>
               <SelectContent>
@@ -87,9 +87,9 @@ const LineViz = () => {
       </div>
 
       {/* Main Content */}
-      <div className="p-2 sm:p-4 max-w-screen-2xl mx-auto">
+      <div className="px-3 py-2 sm:p-4 max-w-screen-2xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
-          <div ref={dragRef}>
+          <div ref={dragRef} className="w-full max-w-lg mx-auto md:max-w-none">
             <ParameterSpace 
               params={params}
               onMouseDown={handleMouseDown}
@@ -97,14 +97,16 @@ const LineViz = () => {
             />
           </div>
 
-          <ImageSpace 
-            W={W}
-            H={H}
-            endpoints={endpoints}
-            normalPoint={normalPoint}
-            paramType={paramType}
-            paramValues={paramValues}
-          />
+          <div className="w-full max-w-lg mx-auto md:max-w-none">
+            <ImageSpace 
+              W={W}
+              H={H}
+              endpoints={endpoints}
+              normalPoint={normalPoint}
+              paramType={paramType}
+              paramValues={paramValues}
+            />
+          </div>
 
           <div className="md:col-span-2">
             <Card className="p-2 sm:p-4 dark:border-gray-700">
