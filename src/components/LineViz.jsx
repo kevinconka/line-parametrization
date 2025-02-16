@@ -111,8 +111,10 @@ const LineViz = () => {
               <h2 className="text-base sm:text-lg font-medium mb-2 sm:mb-4 dark:text-white">
                 Mathematical Description
               </h2>
-              <div className="overflow-y-auto">
-                <MathDescription description={currentParam.description} />
+              <div className="overflow-y-auto flex justify-center">
+                <div className="max-w-4xl w-full">
+                  <MathDescription description={currentParam.description} />
+                </div>
               </div>
             </Card>
           </div>

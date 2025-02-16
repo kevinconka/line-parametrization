@@ -4,7 +4,7 @@ const MathDescription = ({ description }) => {
   const { overview, parameters, equations, notes } = description;
   
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       {/* Overview */}
       <div className="flex justify-center">
         <p className="text-gray-700 dark:text-gray-300 text-center">
